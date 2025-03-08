@@ -1,30 +1,30 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Inter } from "next/font/google";
-import client from "@/lib/mongodb";
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import Image from 'next/image'
+import Link from 'next/link'
+import { Inter } from 'next/font/google'
+import client from '@/lib/mongodb'
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 
 type ConnectionStatus = {
-  isConnected: boolean;
-};
+  isConnected: boolean
+}
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const getServerSideProps: GetServerSideProps<
   ConnectionStatus
 > = async () => {
   try {
-    await client.connect(); // `await client.connect()` will use the default database passed in the MONGODB_URI
+    await client.connect() // `await client.connect()` will use the default database passed in the MONGODB_URI
     return {
       props: { isConnected: true },
-    };
+    }
   } catch (e) {
-    console.error(e);
+    console.error(e)
     return {
       props: { isConnected: false },
-    };
+    }
   }
-};
+}
 
 export default function Home({
   isConnected,
@@ -45,7 +45,7 @@ export default function Home({
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{" "}
+            By{' '}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
@@ -68,7 +68,7 @@ export default function Home({
             height={37}
             priority
           />
-          {" + "}
+          {' + '}
           <Image
             className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] saturate-0 brightness-0 dark:saturate-100 dark:brightness-100"
             src="/mongodb.svg"
@@ -84,7 +84,7 @@ export default function Home({
           </h2>
         ) : (
           <h2 className="text-lg text-red-500">
-            You are NOT connected to MongoDB. Check the <code>README.md</code>{" "}
+            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
             for instructions.
           </h2>
         )}
@@ -108,7 +108,7 @@ export default function Home({
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
+            Docs{' '}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -125,7 +125,7 @@ export default function Home({
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
+            Learn{' '}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -142,7 +142,7 @@ export default function Home({
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
+            Templates{' '}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -159,7 +159,7 @@ export default function Home({
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
+            Deploy{' '}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -170,5 +170,5 @@ export default function Home({
         </a>
       </div>
     </main>
-  );
+  )
 }
