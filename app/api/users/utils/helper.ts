@@ -1,14 +1,8 @@
 import { type ObjectId } from 'mongodb'
 import bcrypt from 'bcryptjs'
-import User from '@/modals/user'
-import {
-  type QueryType,
-  type PaginationType,
-  type ResponseType,
-  type UpdateUserType,
-  type UserType,
-} from './dataTypes'
-import { PaginationValidator, UpdatedUserValidator } from './validation'
+import User from '@/server/modals/user'
+import { type UpdateUserType, type UserType } from './types'
+import { UpdatedUserValidator } from './validation'
 import { NextResponse } from 'next/server'
 
 export async function getFormatedUser(body: UserType) {
@@ -20,24 +14,6 @@ export async function getFormatedUser(body: UserType) {
   const salt = await bcrypt.genSalt(10)
   user.password = await bcrypt.hash(user.password, salt)
   return user
-}
-
-export function getPaginationValidation(urlString: string) {
-  const url = new URL(urlString)
-  const query = Object.fromEntries(url.searchParams) as QueryType
-  return PaginationValidator.safeParse(query)
-}
-
-export function getPagination(limit: string, page: string, totalUsers: number) {
-  const limitValue = parseInt(limit, 10)
-  const pageValue = parseInt(page, 10)
-
-  const pagination: PaginationType = {
-    total: totalUsers,
-    currentPage: pageValue,
-    totalPages: Math.ceil(totalUsers / limitValue),
-  }
-  return pagination
 }
 
 export async function getUsers(limit: string, page: string) {
@@ -67,8 +43,4 @@ export function userValidation(user: UpdateUserType) {
     return NextResponse.json({ error: errResponse }, { status: 400 })
   }
   return true
-}
-
-export function sendResponse(content: ResponseType, statusCode: number) {
-  return NextResponse.json(content, { status: statusCode })
 }

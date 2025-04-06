@@ -1,15 +1,18 @@
-import { NextRequest } from 'next/server'
-import { type UserType } from './utils/types'
-import { getFormatedUser, insertUser, getUsers } from './utils/helper'
-import { UserValidator } from './utils/validation'
-import { connectToDB } from '@/server/lib/db'
-import { UserEnums } from './utils/enums'
-import User from '@/server/modals/user'
 import {
-  sendResponse,
   getPagination,
   getPaginationValidation,
+  sendResponse,
 } from '@/server/helper'
+import { connectToDB } from '@/server/lib/db'
+import { NextRequest } from 'next/server'
+import { AssetAttributeType } from './utils/types'
+import {
+  getAllAssetAttributes,
+  getFormatedAssetAttribute,
+  insertAssetAttribute,
+} from './utils/helper'
+import AssetAttribute from '@/server/modals/assetApp/assetAttribute'
+import { assetAttributeValidator } from './utils/validation'
 
 export async function GET(req: NextRequest) {
   try {
@@ -23,9 +26,11 @@ export async function GET(req: NextRequest) {
     } else {
       const { limit = '10', page = '1' } = validation.data
 
-      const users: UserType[] = await getUsers(limit, page)
-      const totalUsers: number = await User.countDocuments()
-
+      const users: AssetAttributeType[] = await getAllAssetAttributes(
+        limit,
+        page
+      )
+      const totalUsers: number = await AssetAttribute.countDocuments()
       const pagination = getPagination(limit, page, totalUsers)
 
       return sendResponse({ pagination: pagination, data: users }, 200)
@@ -38,12 +43,10 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const body: UserType = await req.json()
-
+  const body: AssetAttributeType = await req.json()
   try {
     await connectToDB()
-    const user = await getFormatedUser(body)
-    const validation = UserValidator.safeParse(user)
+    const validation = assetAttributeValidator.safeParse(body)
     if (!validation.success) {
       return sendResponse(
         {
@@ -53,10 +56,11 @@ export async function POST(req: NextRequest) {
         400
       )
     } else {
-      const response = await insertUser(user)
+      const assetAttrs = await getFormatedAssetAttribute(body)
+      const response = await insertAssetAttribute(assetAttrs)
       return sendResponse(
         {
-          message: UserEnums.USER_SAVE_SUCCESS,
+          message: 'Asset Attributes Created Successfully',
           data: response,
         },
         201
