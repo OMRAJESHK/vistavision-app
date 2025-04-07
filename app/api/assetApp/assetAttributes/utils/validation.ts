@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const assetAttributeValidator = z.object({
   asset_name: z.string().nonempty({
-    message: 'Asset name is required and must be a valid ObjectId.',
+    message: 'Asset name is required.',
   }),
   sewage: z
     .object({
