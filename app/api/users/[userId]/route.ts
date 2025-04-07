@@ -1,9 +1,9 @@
 import { Types } from 'mongoose'
-import { UpdateUserType, type ParamsType } from '../utils/dataTypes'
-import { sendResponse } from '../utils/helper'
+import { UpdateUserType, type ParamsType } from '../utils/types'
 import { UpdatedUserValidator } from '../utils/validation'
-import { connectToDB } from '@/lib/db'
-import User from '@/modals/user'
+import { connectToDB } from '@/server/lib/db'
+import User from '@/server/modals/user'
+import { sendResponse } from '@/server/helper'
 
 export async function PUT(req: Request, { params }: ParamsType) {
   try {
